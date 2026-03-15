@@ -1,0 +1,61 @@
+name: smoke_test
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [remote_call]
+  schedule:
+    - cron: "0 11 * * *"  # runs on 5 am tx time every day
+    - cron: "0 5 * * *"  # runs on 11 pm tx time every day
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Run tests
+        run: |
+          # Run tests directly (not in Docker container) connecting to Selenium
+          SELENIUM_HOST=localhost SELENIUM_PORT=4444 \
+          pytest -m login -v \
+            --html=elements/reports/report.html \
+            --self-contained-html
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: |
+            elements/reports/
+            screenshots/
+            pytest*.log
+          retention-days: 30
+
+      - uses: actions/checkout@v4
+        if: success() || failure()
+      - run: |
+          cd elements
+          #mkdir -p reports
+          #pytest -m login 
+          chmod 777 /home/runner/work/veraz_test_framework/reports 
+          #new comment
+          #new comment 2
+      - name: Set output
+        if: success() || failure()
+        id: results
+        run: echo "artifactPath=./" >> $GITHUB_OUTPUT
+
+      - uses: actions/upload-artifact@v4
+        if: success() || failure()
+        with:
+          name: test-report
+          path: ${{ steps.results.outputs.artifactPath }}
+
+            
