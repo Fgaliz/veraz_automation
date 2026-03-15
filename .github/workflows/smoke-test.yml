@@ -44,7 +44,7 @@ jobs:
           cd elements
           #mkdir -p reports
           #pytest -m login 
-          chmod 777 /home/runner/work/veraz_test_framework/elementsreports 
+          chmod 777 /home/runner/work/veraz_test_framework/elements/
           #new comment
           #new comment 2
       - name: Set output
