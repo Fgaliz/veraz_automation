@@ -37,15 +37,6 @@ jobs:
             screenshots/
             pytest*.log
           retention-days: 30
-      - name: Set output
-        if: success() || failure()
-        id: results
-        run: echo "artifactPath=./" >> $GITHUB_OUTPUT
 
-      - uses: actions/upload-artifact@v4
-        if: success() || failure()
-        with:
-          name: test-report
-          path: ${{ steps.results.outputs.artifactPath }}
 
             
