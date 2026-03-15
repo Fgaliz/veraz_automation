@@ -25,7 +25,7 @@ jobs:
           # Run tests directly (not in Docker container) connecting to Selenium
           SELENIUM_HOST=localhost SELENIUM_PORT=4444 \
           pytest -m login -v \
-            --html=elements/reports/report.html \
+            --html=elements/report.html \
             --self-contained-html
       - name: Upload test artifacts
         if: always()
@@ -44,7 +44,7 @@ jobs:
           cd elements
           #mkdir -p reports
           #pytest -m login 
-          chmod 777 /home/runner/work/veraz_test_framework/reports 
+          chmod 777 /home/runner/work/veraz_test_framework/elementsreports 
           #new comment
           #new comment 2
       - name: Set output
