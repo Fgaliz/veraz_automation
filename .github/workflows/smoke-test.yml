@@ -24,7 +24,7 @@ jobs:
         run: |
           # Run tests directly (not in Docker container) connecting to Selenium
           SELENIUM_HOST=localhost SELENIUM_PORT=4444 \
-          pytest -m login -v \
+          pytest -m cycle -v \
             --html=elements/report.html \
             --self-contained-html
       - name: Upload test artifacts
@@ -33,7 +33,7 @@ jobs:
         with:
           name: test-artifacts
           path: |
-            elements/reports/
+            elements/report.html
             screenshots/
             pytest*.log
           retention-days: 30
@@ -42,11 +42,10 @@ jobs:
         if: success() || failure()
       - run: |
           cd elements
-          #mkdir -p reports
-          #pytest -m login 
+        
+         
           chmod 777 /home/runner/work/veraz_test_framework/elements/
-          #new comment
-          #new comment 2
+          
       - name: Set output
         if: success() || failure()
         id: results
